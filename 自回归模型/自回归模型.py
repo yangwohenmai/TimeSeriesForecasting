@@ -9,7 +9,9 @@ train, test = X[1:len(X)-7], X[len(X)-7:]
 # train autoregression
 model = AR(train)
 model_fit = model.fit()
+# 滞后长度
 print('Lag: %s' % model_fit.k_ar)
+# 系数
 print('Coefficients: %s' % model_fit.params)
 # make predictions
 predictions = model_fit.predict(start=len(train), end=len(train)+len(test)-1, dynamic=False)
