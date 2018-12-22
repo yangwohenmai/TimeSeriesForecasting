@@ -7,15 +7,15 @@ from statsmodels.graphics.tsaplots import plot_pacf
 
 # create a differenced series
 def difference(dataset, interval=1):
-	diff = list()
-	for i in range(interval, len(dataset)):
-		value = dataset[i] - dataset[i - interval]
-		diff.append(value)
-	return diff
+    diff = list()
+    for i in range(interval, len(dataset)):
+        value = dataset[i] - dataset[i - interval]
+        diff.append(value)
+    return diff
 
 # invert differenced value
 def inverse_difference(history, yhat, interval=1):
-	return yhat + history[-interval]
+    return yhat + history[-interval]
 
 # load data
 series = Series.from_csv('dataset.csv')
@@ -28,18 +28,18 @@ train, test = X[0:train_size], X[train_size:]
 history = [x for x in train]
 predictions = list()
 for i in range(len(test)):
-	# difference data
-	months_in_year = 12
-	diff = difference(history, months_in_year)
-	# predict
-	model = ARIMA(diff, order=(0,0,1))
-	model_fit = model.fit(trend='nc', disp=0)
-	yhat = model_fit.forecast()[0]
-	yhat = inverse_difference(history, yhat, months_in_year)
-	predictions.append(yhat)
-	# observation
-	obs = test[i]
-	history.append(obs)
+    # difference data
+    months_in_year = 12
+    diff = difference(history, months_in_year)
+    # predict
+    model = ARIMA(diff, order=(0,0,1))
+    model_fit = model.fit(trend='nc', disp=0)
+    yhat = model_fit.forecast()[0]
+    yhat = inverse_difference(history, yhat, months_in_year)
+    predictions.append(yhat)
+    # observation
+    obs = test[i]
+    history.append(obs)
 # errors
 residuals = [test[i]-predictions[i] for i in range(len(test))]
 residuals = DataFrame(residuals)
