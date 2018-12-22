@@ -1,4 +1,4 @@
-from pandas import read_csv
+from pandas import Series
 from statsmodels.tsa.arima_model import ARIMA
 from scipy.stats import boxcox
 import numpy
@@ -18,7 +18,7 @@ def difference(dataset, interval=1):
 	return diff
 
 # load data
-series = read_csv('dataset.csv')
+series = Series.from_csv('dataset.csv')
 # prepare data
 X = series.values
 X = X.astype('float32')
