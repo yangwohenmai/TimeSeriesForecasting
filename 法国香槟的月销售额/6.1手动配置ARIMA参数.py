@@ -3,7 +3,7 @@ from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.arima_model import ARIMA
 from math import sqrt
 
-# create a differenced series
+# 根据给出的步长interval，创建一个差分序列，间隔12个数字相减
 def difference(dataset, interval=1):
 	diff = list()
 	for i in range(interval, len(dataset)):
@@ -11,7 +11,7 @@ def difference(dataset, interval=1):
 		diff.append(value)
 	return diff
 
-# invert differenced value
+# 还原差分值
 def inverse_difference(history, yhat, interval=1):
 	return yhat + history[-interval]
 
@@ -28,18 +28,24 @@ predictions = list()
 for i in range(len(test)):
 	# difference data
 	months_in_year = 12
+	# 获得差分剔除季节性后的新序列
 	diff = difference(history, months_in_year)
-	# predict
+	# 用新序列训练模型
 	model = ARIMA(diff, order=(1,1,1))
+	# 禁用从模型中自动添加趋势常量
 	model_fit = model.fit(trend='nc', disp=0)
+	# 获取预测结果
 	yhat = model_fit.forecast()[0]
+	# 将预测后的结果反差分
 	yhat = inverse_difference(history, yhat, months_in_year)
+	# 保存预测值
 	predictions.append(yhat)
-	# observation
+	# 获取真实值
 	obs = test[i]
 	history.append(obs)
+	# 对比预测结果
 	print('>Predicted=%.3f, Expected=%3.f' % (yhat, obs))
-# report performance
+# 获取误差分析报告
 mse = mean_squared_error(test, predictions)
 rmse = sqrt(mse)
 print('RMSE: %.3f' % rmse)

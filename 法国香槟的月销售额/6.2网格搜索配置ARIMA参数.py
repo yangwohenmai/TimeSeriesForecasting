@@ -5,7 +5,7 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 import numpy
 
-# create a differenced series
+# 根据给出的步长interval，创建一个差分序列，间隔12个数字相减
 def difference(dataset, interval=1):
 	diff = list()
 	for i in range(interval, len(dataset)):
@@ -13,11 +13,11 @@ def difference(dataset, interval=1):
 		diff.append(value)
 	return numpy.array(diff)
 
-# invert differenced value
+# 还原差分值
 def inverse_difference(history, yhat, interval=1):
 	return yhat + history[-interval]
 
-# evaluate an ARIMA model for a given order (p,d,q) and return RMSE
+# 评估order（p，d，q）的ARIMA模型并返回RMSE
 def evaluate_arima_model(X, arima_order):
 	# prepare training dataset
 	X = X.astype('float32')
@@ -41,7 +41,7 @@ def evaluate_arima_model(X, arima_order):
 	rmse = sqrt(mse)
 	return rmse
 
-# evaluate combinations of p, d and q values for an ARIMA model
+# 评估ARIMA模型的p，d和q值的组合，获取最小的RMSE数值
 def evaluate_models(dataset, p_values, d_values, q_values):
 	dataset = dataset.astype('float32')
 	best_score, best_cfg = float("inf"), None
