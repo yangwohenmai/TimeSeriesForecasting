@@ -37,13 +37,16 @@ history.append(y[0])
 print('>Predicted=%.3f, Expected=%3.f' % (yhat, y[0]))
 # rolling forecasts
 for i in range(1, len(y)):
-    # difference data
+    # 差分
     months_in_year = 12
     diff = difference(history, months_in_year)
     # predict
+    # 配置模型参数
     model = ARIMA(diff, order=(0, 0, 1))
+    # 训练模型
     model_fit = model.fit(trend='nc', disp=0)
     yhat = model_fit.forecast()[0]
+    # 获得预测值，保存和修正预测值
     yhat = bias + inverse_difference(history, yhat, months_in_year)
     predictions.append(yhat)
     # observation
