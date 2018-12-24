@@ -9,7 +9,7 @@ def parser(x):
 	return datetime.strptime('190'+x, '%Y-%m')
 
 series = read_csv('shampoo-sales.csv', header=0, parse_dates=[0], index_col=0, squeeze=True, date_parser=parser)
-# 构建以恶监督学习结构，滞后数据表
+# 构建以个监督学习结构，滞后数据表
 values = DataFrame(series.values)
 dataframe = concat([values.shift(1), values], axis=1)
 dataframe.columns = ['t-1', 't+1']
@@ -26,7 +26,7 @@ test_X, test_y = test[:,0], test[:,1]
 def model_persistence(x):
 	return x
 
-# 评估
+# 用model_persistence函数模拟预测模型，对预测结果和真实值做残差比较，检验结果
 predictions = list()
 for x in test_X:
 	yhat = model_persistence(x)
