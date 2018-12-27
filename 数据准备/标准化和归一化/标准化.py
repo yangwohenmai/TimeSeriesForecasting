@@ -5,18 +5,18 @@ from math import sqrt
 # load the dataset and print the first 5 rows
 series = Series.from_csv('daily-minimum-temperatures-in-me.csv', header=0)
 print(series.head())
-# prepare data for standardization
+# 准备数据
 values = series.values
 values = values.reshape((len(values), 1))
-# train the standardization
+# 定义标准化模型
 scaler = StandardScaler()
 scaler = scaler.fit(values)
 print('Mean: %f, StandardDeviation: %f' % (scaler.mean_, sqrt(scaler.var_)))
-# standardization the dataset and print the first 5 rows
+# 开始标准化，打印前五行
 normalized = scaler.transform(values)
 for i in range(5):
 	print(normalized[i])
-# inverse transform and print the first 5 rows
+# 逆标准化数据
 inversed = scaler.inverse_transform(normalized)
 for i in range(5):
 	print(inversed[i])
