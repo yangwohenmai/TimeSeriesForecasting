@@ -3,13 +3,13 @@ from pandas import Series
 from statsmodels.tsa.arima_model import ARIMA
 from sklearn.metrics import mean_squared_error
 
-# evaluate an ARIMA model for a given order (p,d,q)
+# 评估给定订单的ARIMA模型（p，d，q）
 def evaluate_arima_model(X, arima_order):
 	# prepare training dataset
 	train_size = int(len(X) * 0.66)
 	train, test = X[0:train_size], X[train_size:]
 	history = [x for x in train]
-	# make predictions
+	# 进行预测
 	predictions = list()
 	for t in range(len(test)):
 		model = ARIMA(history, order=arima_order)
@@ -17,11 +17,11 @@ def evaluate_arima_model(X, arima_order):
 		yhat = model_fit.forecast()[0]
 		predictions.append(yhat)
 		history.append(test[t])
-	# calculate out of sample error
+	# 计算样本的误差值
 	error = mean_squared_error(test, predictions)
 	return error
 
-# evaluate combinations of p, d and q values for an ARIMA model
+# 评估ARIMA模型的p，d和q值的组合
 def evaluate_models(dataset, p_values, d_values, q_values):
 	dataset = dataset.astype('float32')
 	best_score, best_cfg = float("inf"), None
@@ -40,7 +40,7 @@ def evaluate_models(dataset, p_values, d_values, q_values):
 
 # load dataset
 series = Series.from_csv('daily-total-female-births.csv', header=0)
-# evaluate parameters
+# 评估参数
 p_values = [0, 1, 2, 4, 6, 8, 10]
 d_values = range(0, 3)
 q_values = range(0, 3)
